@@ -1,38 +1,35 @@
-import { PureComponent } from 'react';
+import { useEffect } from 'react';
 import { Overlay, ModalS, ExitCross } from './modal.styled';
 
-export class Modal extends PureComponent {
-  componentDidMount() {
-    window.addEventListener('keydown', this.handleKeydown);
-  }
+export const Modal = ({ onClose, largeImageURL }) => {
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeydown);
 
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeydown);
-  }
+    return () => {
+      window.removeEventListener('keydown', handleKeydown);
+    };
+  });
 
-  handleKeydown = e => {
+  const handleKeydown = e => {
     if (e.code === 'Escape') {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleBackdrop = evt => {
+  const handleBackdrop = evt => {
     if (evt.currentTarget === evt.target) {
-      this.props.onClose();
+      onClose();
     }
   };
-  
-  render() {
-    const { largeImageURL, onClose } = this.props;
-    return (
-      <>
-        <Overlay onClick={this.handleBackdrop}>
-          <ModalS>
-            <ExitCross size="24px" onClick={onClose} />
-            <img src={largeImageURL} alt="" />
-          </ModalS>
-        </Overlay>
-      </>
-    );
-  }
-}
+
+  return (
+    <>
+      <Overlay onClick={handleBackdrop}>
+        <ModalS>
+          <ExitCross size="24px" onClick={onClose} />
+          <img src={largeImageURL} alt="" />
+        </ModalS>
+      </Overlay>
+    </>
+  );
+};

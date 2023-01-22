@@ -1,27 +1,20 @@
-import { PureComponent } from 'react';
 import { GalleryImageG, GalleryItemG } from './galleryItem.styled';
 import { Modal } from 'components/Modal/modal';
+import { useState } from 'react';
 
-export class GalleyItem extends PureComponent {
-  state = {
-    modal: false,
+export const GalleyItem = ({ id, webformatURL, largeImageURL }) => {
+  const [modal, setModal] = useState(false);
+
+  const toggleModal = () => {
+    setModal(!modal);
   };
 
-  toggleModal = () => {
-    this.setState(({ modal }) => ({ modal: !modal }));
-  };
-  
-  render() {
-    const { id, webformatURL, largeImageURL } = this.props;
-    return (
-      <>
-        <GalleryItemG key={id} onClick={this.toggleModal}>
-          <GalleryImageG src={webformatURL} alt="" />
-        </GalleryItemG>
-        {this.state.modal && (
-          <Modal largeImageURL={largeImageURL} onClose={this.toggleModal} />
-        )}
-      </>
-    );
-  }
-}
+  return (
+    <>
+      <GalleryItemG key={id} onClick={toggleModal}>
+        <GalleryImageG src={webformatURL} alt="" />
+      </GalleryItemG>
+      {modal && <Modal largeImageURL={largeImageURL} onClose={toggleModal} />}
+    </>
+  );
+};
